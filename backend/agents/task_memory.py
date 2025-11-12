@@ -1,5 +1,3 @@
-# backend/agents/task_memory.py
-
 from retriever import add_to_memory
 
 def store_action_items(actions, meeting_name: str):

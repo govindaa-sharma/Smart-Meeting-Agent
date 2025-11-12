@@ -1,5 +1,3 @@
-# backend/agents/action_items.py
-
 import google.generativeai as genai
 
 def extract_action_items(transcript: str):
@@ -21,6 +19,5 @@ def extract_action_items(transcript: str):
     if not response.text:
         return []
 
-    # convert into list
     lines = [line.strip("-• ").strip() for line in response.text.split("\n") if line.strip()]
     return lines

@@ -1,5 +1,3 @@
-# backend/graph.py
-
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -17,7 +15,6 @@ from agents.task_memory import store_action_items
 from retriever import retrieve
 
 
-# ---- STATE ----
 class MeetingState(TypedDict):
     title: str
     transcript: str
@@ -25,7 +22,6 @@ class MeetingState(TypedDict):
     actions: List[str]
 
 
-# ---- NODES ----
 
 def summarize_node(state: MeetingState):
     summary = summarize_meeting(state["transcript"])
@@ -34,23 +30,19 @@ def summarize_node(state: MeetingState):
 def actions_node(state: MeetingState):
     actions = extract_action_items(state["transcript"])
 
-    # ✅ Ensure actions is always a list
     if not actions or not isinstance(actions, list):
         actions = []
 
-    # ✅ Store them into memory for long-term recall
     if actions:
         store_action_items(actions, state["title"])
 
     return {"actions": actions}
 
-# Optional: retrieve memory later
 def retrieve_node(state: MeetingState):
     memory = retrieve("important actions", state["title"])
     return {"memory": memory}
 
 
-# ---- GRAPH ----
 workflow = StateGraph(MeetingState)
 
 workflow.add_node("summarize", summarize_node)

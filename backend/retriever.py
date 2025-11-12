@@ -1,5 +1,3 @@
-# backend/retriever.py
-
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -11,7 +9,7 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import FAISS
 
 emb = GoogleGenerativeAIEmbeddings(
-    model="models/embedding-001",  # ✅ safe model that doesn't require OAuth
+    model="models/embedding-001", 
     google_api_key=os.getenv("GOOGLE_API_KEY")
 )
 

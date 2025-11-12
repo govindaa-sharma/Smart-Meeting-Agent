@@ -1,5 +1,3 @@
-# backend/agents/summarizer.py
-
 import google.generativeai as genai
 
 def summarize_meeting(transcript: str) -> str:

@@ -1,0 +1,9 @@
+Alex: Okay everyone, thanks for joining. So this is the kickoff for our AI dashboard project. Basically, we need a dashboard that uses AI to summarize analytics data automatically. 
+Priya: Yeah, I think React should work great for the frontend. Django can handle the backend APIs.
+Jordan: I agree, but we’ll need to set up proper data ingestion pipelines first, otherwise analytics won’t make sense.
+Meera: The design part shouldn’t take too long. I’ll prepare some wireframes on Figma once you guys have the data flow ready.
+Alex: Perfect. Let’s decide roles — Priya, you handle the frontend setup, Jordan takes care of the data scripts, and I’ll do the database part. Meera, you handle UI and branding.
+Meera: Got it, I’ll share the mockups by this weekend.
+Priya: I’ll try to get the basic React structure ready by Friday.
+Jordan: Cool. I’ll start with cleaning the CSVs and automate it.
+Alex: Sounds good everyone. Let’s catch up next week to review progress.
