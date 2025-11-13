@@ -17,7 +17,7 @@ os.makedirs(VECTOR_STORE_DIR, exist_ok=True)
 
 
 def get_vector_store(meeting_name: str):
-    path = f"{VECTOR_STORE_DIR}/{meeting_name}"
+    path = f"{VECTOR_STORE_DIR}/actions_{meeting_name}"
     if os.path.exists(path):
         return FAISS.load_local(path, emb, allow_dangerous_deserialization=True)
     return None
@@ -29,7 +29,7 @@ def add_to_memory(text: str, meeting_name: str):
         vs = FAISS.from_texts([text], emb)
     else:
         vs.add_texts([text])
-    vs.save_local(f"{VECTOR_STORE_DIR}/{meeting_name}")
+    vs.save_local(f"{VECTOR_STORE_DIR}/actions_{meeting_name}")
 
 
 def retrieve(query: str, meeting_name: str) -> str:

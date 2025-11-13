@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from graph import workflow
+from graph import workflow, qa_graph
 import shutil
 from dotenv import load_dotenv
 load_dotenv()
@@ -77,5 +77,6 @@ def get_meeting_details(title: str):
 def ask_question(payload: dict):
     meeting = payload["meeting"]
     question = payload["query"]
-    result = workflow.invoke({"title": meeting, "transcript": question})
-    return {"response": result["summary"]} 
+
+    result = qa_graph.invoke({"title": meeting, "query": question})
+    return {"response": result["answer"]}
