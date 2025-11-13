@@ -18,10 +18,16 @@ export default function Upload() {
       const form = new FormData();
       form.append("file", file);
       // title is query param in your backend
-      await api.post(`/upload_meeting?title=${encodeURIComponent(title)}`, form, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      setMsg("Uploaded & processed successfully.");
+      const { data } = await api.post(
+        `/upload_meeting?title=${encodeURIComponent(title)}`,
+        form,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      
+      console.log("UPLOAD RESPONSE:", data);
+      setMsg("Uploaded successfully:\n" + JSON.stringify(data, null, 2));
+      localStorage.setItem("refreshMeetings", "1");
+      
       setTitle("");
       setFile(null);
     } catch (e) {

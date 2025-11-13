@@ -11,7 +11,6 @@ from typing import TypedDict, List
 from agents.summarizer import summarize_meeting
 from agents.action_items import extract_action_items
 from agents.task_memory import store_action_items
-
 from retriever import retrieve
 
 
@@ -20,12 +19,13 @@ class MeetingState(TypedDict):
     transcript: str
     summary: str
     actions: List[str]
-
+    memory: str
 
 
 def summarize_node(state: MeetingState):
     summary = summarize_meeting(state["transcript"])
     return {"summary": summary}
+
 
 def actions_node(state: MeetingState):
     actions = extract_action_items(state["transcript"])
@@ -38,18 +38,23 @@ def actions_node(state: MeetingState):
 
     return {"actions": actions}
 
-def retrieve_node(state: MeetingState):
-    memory = retrieve("important actions", state["title"])
-    return {"memory": memory}
+
+def memory_node(state: MeetingState):
+    memory_output = retrieve("important actions", state["title"])
+    return {"memory": memory_output}
+
 
 
 workflow = StateGraph(MeetingState)
 
 workflow.add_node("summarize", summarize_node)
 workflow.add_node("actions", actions_node)
+workflow.add_node("memory", memory_node)
 
 workflow.set_entry_point("summarize")
+
 workflow.add_edge("summarize", "actions")
-workflow.add_edge("actions", END)
+workflow.add_edge("actions", "memory")
+workflow.add_edge("memory", END)
 
 workflow = workflow.compile()

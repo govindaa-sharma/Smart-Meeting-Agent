@@ -1,11 +1,13 @@
-Govinda: So, anyone fixed the backend deployment error yet?
-Sanchari: Not yet. It’s something to do with the API key not being loaded from the environment file.
-Rahul: Yeah, that’s what I thought too. I tried printing the env vars — it’s blank.
-Govinda: Okay, I’ll check that after this call. Sneha, did the frontend auth integration finish?
-Sanchari: Yup, it’s done. I added token persistence too.
-Neha: Oh and about the hackathon slides — I’ve started preparing them. We can rehearse on Sunday maybe?
-Rahul: By the way, the ML model’s accuracy improved by 5%, so that’s good news.
-Govinda: Great! Rahul, can you retrain with the new dataset and upload the model file by Monday?
-Rahul: Sure thing.
-Sanchari: I’ll push my latest code to GitHub after lunch.
-Neha: Cool, I’ll finalize the presentation by tomorrow.
+Here's a summary of the meeting:
+
+**Key Updates & Discussion Points:**
+*   **Backend Deployment Error:** The API key is not loading from the environment file, and environment variables appear blank.
+*   **Frontend Authentication:** Integration is complete, including token persistence.
+*   **ML Model:** Accuracy has improved by 5%.
+*   **Hackathon Presentation:** Slide preparation has started.
+
+**Decisions & Action Items:**
+*   **Govinda:** Will investigate the backend deployment error (API key/environment variables) after the call.
+*   **Rahul:** To retrain the ML model with the new dataset and upload the model file by **Monday**.
+*   **Neha:** To finalize the hackathon presentation by **tomorrow** and suggested rehearsing on **Sunday**.
+*   **Sanchari:** Will push her latest code to GitHub after lunch.

@@ -1,9 +1,21 @@
-Alex: Okay everyone, thanks for joining. So this is the kickoff for our AI dashboard project. Basically, we need a dashboard that uses AI to summarize analytics data automatically. 
-Priya: Yeah, I think React should work great for the frontend. Django can handle the backend APIs.
-Jordan: I agree, but we’ll need to set up proper data ingestion pipelines first, otherwise analytics won’t make sense.
-Meera: The design part shouldn’t take too long. I’ll prepare some wireframes on Figma once you guys have the data flow ready.
-Alex: Perfect. Let’s decide roles — Priya, you handle the frontend setup, Jordan takes care of the data scripts, and I’ll do the database part. Meera, you handle UI and branding.
-Meera: Got it, I’ll share the mockups by this weekend.
-Priya: I’ll try to get the basic React structure ready by Friday.
-Jordan: Cool. I’ll start with cleaning the CSVs and automate it.
-Alex: Sounds good everyone. Let’s catch up next week to review progress.
+Here's a summary of the meeting:
+
+**Project Kickoff: AI Dashboard**
+
+The meeting served as the kickoff for the AI Dashboard project, focused on automatically summarizing analytics data.
+
+**Key Decisions & Discussion Points:**
+
+*   **Technology Stack:** React will be used for the frontend and Django for backend APIs.
+*   **Data Importance:** Establishing robust data ingestion pipelines was highlighted as critical before analytics can be effectively implemented.
+*   **Design Process:** UI/UX design will begin with wireframes on Figma once the data flow is defined.
+
+**Assigned Roles & Immediate Next Steps:**
+
+*   **Alex:** Database setup.
+*   **Priya:** Frontend setup (React structure targeted by Friday).
+*   **Jordan:** Data scripts, including cleaning CSVs and automation.
+*   **Meera:** UI/Branding (mockups to be shared by the weekend).
+
+**Next Meeting:**
+A follow-up meeting is scheduled for next week to review progress.

@@ -18,17 +18,24 @@ export default function Ask() {
   const [meetings, setMeetings] = useState([]);
   const [selected, setSelected] = useState("");
 
+  const loadMeetings = async () => {
+    try {
+      const { data } = await api.get("/meetings");
+      setMeetings(data || []);
+      if ((data || []).length && !selected) setSelected(data[0]);
+    } catch {
+      setMeetings([]);
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await api.get("/meetings");
-        setMeetings(data || []);
-        if ((data || []).length && !selected) setSelected(data[0]);
-      } catch {
-        setMeetings([]);
-      }
-    })();
+    const refresh = localStorage.getItem("refreshMeetings");
+    if (refresh) {
+      loadMeetings();
+      localStorage.removeItem("refreshMeetings");
+    }
   }, []);
+  
 
   return (
     <Box sx={{ p: 2 }}>

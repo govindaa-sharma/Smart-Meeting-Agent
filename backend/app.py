@@ -16,20 +16,26 @@ app.add_middleware(
 
 @app.post("/upload_meeting")
 async def upload_meeting(title: str, file: UploadFile = File(...)):
-    path = f"data/meetings/{file.filename}"
-    with open(path, "wb") as buffer:
+    path = f"data/meetings/{title}.txt"
+    raw_path = f"data/meetings/raw_{title}.txt"
+
+    with open(raw_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    with open(path, "r", encoding="utf-8") as f:
+    with open(raw_path, "r", encoding="utf-8") as f:
         transcript = f.read()
 
     result = workflow.invoke({"title": title, "transcript": transcript})
-    return {
-        "title": title,
-        "summary": result["summary"],
-        "actions": result["actions"],
-        "memory_recall": result["memory"]
-    }
+
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(result["summary"])
+
+    import json
+    actions_path = f"data/vector_store/actions_{title}.json"
+    with open(actions_path, "w") as f:
+        json.dump(result["actions"], f, indent=2)
+
+    return result
 
 # @app.post("/chat")
 # def chat(query: str):
@@ -72,4 +78,4 @@ def ask_question(payload: dict):
     meeting = payload["meeting"]
     question = payload["query"]
     result = workflow.invoke({"title": meeting, "transcript": question})
-    return {"response": result["summary"]}  # or state field you use
+    return {"response": result["summary"]} 

@@ -5,13 +5,12 @@ load_dotenv()
 import google.generativeai as genai
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+# from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
-emb = GoogleGenerativeAIEmbeddings(
-    model="models/embedding-001", 
-    google_api_key=os.getenv("GOOGLE_API_KEY")
-)
+model_name = "all-MiniLM-L6-v2"  
+emb = HuggingFaceEmbeddings(model_name=model_name)
 
 VECTOR_STORE_DIR = "data/vector_store"
 os.makedirs(VECTOR_STORE_DIR, exist_ok=True)
