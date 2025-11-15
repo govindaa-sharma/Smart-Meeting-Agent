@@ -1,4 +1,3 @@
-# embeddings.py
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
 def embedding_model():

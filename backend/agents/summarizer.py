@@ -1,4 +1,3 @@
-# summarizer.py
 import os
 import logging
 import google.generativeai as genai

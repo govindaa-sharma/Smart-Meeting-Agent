@@ -1,4 +1,3 @@
-# retriever.py
 import os
 import logging
 from dotenv import load_dotenv
@@ -10,15 +9,15 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 logger = logging.getLogger(__name__)
 
-# Embedding model used for FAISS
+
 EMB_MODEL = "all-MiniLM-L6-v2"
 emb = HuggingFaceEmbeddings(model_name=EMB_MODEL)
 
-# storage paths
+
 VECTOR_STORE_ROOT = "data/vector_store"
 os.makedirs(VECTOR_STORE_ROOT, exist_ok=True)
 
-# chunking config
+
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 100
 splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
@@ -57,7 +56,7 @@ def add_transcript_to_memory(transcript: str, meeting_name: str):
         return
 
     texts = splitter.split_text(transcript)
-    # tag each transcript chunk so we can identify it in retrieval if necessary
+    
     tagged = [f"TRANSCRIPT: {t}" for t in texts]
 
     folder = _vs_folder(meeting_name)
@@ -123,18 +122,18 @@ def retrieve(query: str, meeting_name: str, k: int = 5) -> str:
     """
     vs = get_vector_store(meeting_name)
     if not vs:
-        return ""  # empty string => no memory
+        return ""  
 
     try:
         docs = vs.similarity_search(query, k=k)
         pieces = []
         for d in docs:
-            # unified retrieval: use page_content when available, else str(doc)
+            
             txt = getattr(d, "page_content", None)
             if txt is None:
                 txt = str(d)
             pieces.append(txt)
-        # Join selected pieces with separators so the LLM sees clear boundaries
+        
         return "\n\n---\n\n".join(pieces)
     except Exception as e:
         logger.exception("Similarity search failed for %s: %s", meeting_name, e)

@@ -1,4 +1,3 @@
-# action_items.py
 import os
 import logging
 import google.generativeai as genai
@@ -18,7 +17,7 @@ def extract_action_items(transcript: str):
     if not transcript or not isinstance(transcript, str):
         return []
 
-    # Keep the prompt precise - ask for bullet list lines 'Person: task by date' etc.
+    
     if len(transcript) > 20000:
         transcript = transcript[-20000:]
 

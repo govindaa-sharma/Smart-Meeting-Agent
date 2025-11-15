@@ -1,4 +1,3 @@
-# graph.py
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -59,7 +58,7 @@ def memory_node(state: MeetingState):
         memory_output = ""
     return {"memory": memory_output}
 
-# build meeting workflow
+
 workflow = StateGraph(MeetingState)
 workflow.add_node("summarize", summarize_node)
 workflow.add_node("actions", actions_node)
@@ -70,7 +69,7 @@ workflow.add_edge("actions", "memory")
 workflow.add_edge("memory", END)
 workflow = workflow.compile()
 
-# QA graph
+
 def qa_node(state: QAState):
     query = state.get("query", "")
     title = state.get("title", "")

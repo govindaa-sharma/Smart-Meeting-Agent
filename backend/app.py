@@ -1,4 +1,3 @@
-# app.py
 import os
 import shutil
 import logging
@@ -42,32 +41,32 @@ async def upload_meeting(title: str, file: UploadFile = File(...)):
     summary_path = os.path.join(raw_dir, f"{safe_title}.txt")
 
     try:
-        # Save uploaded file first
+        
         with open(raw_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
-        # Read transcript text safely
+        
         with open(raw_path, "r", encoding="utf-8", errors="replace") as f:
             transcript = f.read()
 
-        # 1) Add full transcript to FAISS memory (so QA can answer arbitrary questions)
+        
         add_transcript_to_memory(transcript, safe_title)
 
-        # 2) Run summarizer & action extraction (LLM)
+        
         summary = summarize_meeting(transcript) or ""
         actions = extract_action_items(transcript) or []
 
-        # 3) Store summary & actions into same FAISS memory
+        
         add_summary_to_memory(summary, safe_title)
         add_actions_to_memory(actions, safe_title)
 
-        # 4) Persist summary text for quick file retrieval
+        
         with open(summary_path, "w", encoding="utf-8") as f:
             f.write(summary)
         print("SUMMARY GENERATED:", summary)
 
 
-        # 5) Return structured response
+        
         return {"ok": True, "summary": summary, "actions": actions}
     except Exception as e:
         logger.exception("upload_meeting failed for %s: %s", safe_title, e)
@@ -83,7 +82,7 @@ def list_meetings():
         all_files = os.listdir(DATA_DIR)
         txt_files = [f for f in all_files if f.endswith(".txt")]
 
-        # Filter out raw_ files
+        
         final_files = [
             f.replace(".txt", "")
             for f in txt_files
@@ -107,7 +106,7 @@ def get_meeting_details(title: str):
         with open(meeting_path, "r", encoding="utf-8", errors="replace") as f:
             summary = f.read()
 
-    # Actions from FAISS
+    
     actions_memory = retrieve("action", title, k=10)
     actions = []
     if actions_memory:
@@ -126,7 +125,7 @@ def ask_question(payload: dict):
         raise HTTPException(status_code=400, detail="Both 'meeting' and 'query' fields are required.")
 
     try:
-        # call QA agent logic (kept separate file)
+        
         from agents.qa_agent import answer_question
         ans = answer_question(question, meeting)
         return {"response": ans}

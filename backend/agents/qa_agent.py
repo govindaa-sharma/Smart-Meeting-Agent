@@ -1,4 +1,3 @@
-# qa_agent.py
 import os
 import logging
 import google.generativeai as genai
@@ -16,12 +15,12 @@ def answer_question(query: str, meeting_name: str) -> str:
     if not query or not meeting_name:
         return "Missing meeting or question."
 
-    # Get memory text (may be empty)
+    
     memory = retrieve(query, meeting_name, k=6) or ""
-    # Also check if a vector store exists at all (helps to give better message)
+    
     has_vs = bool(get_vector_store(meeting_name))
 
-    # Build robust prompt:
+    
     prompt_parts = []
     prompt_parts.append("You are an assistant that answers user questions using ONLY the provided meeting memory and summary.")
     prompt_parts.append("If the exact information is not present, say 'I don't have enough info about that in this meeting.' Do NOT invent facts.")
