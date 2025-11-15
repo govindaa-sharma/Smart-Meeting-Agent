@@ -1,16 +1,35 @@
+# summarizer.py
+import os
+import logging
 import google.generativeai as genai
 
+logger = logging.getLogger(__name__)
+MODEL_NAME = "gemini-2.5-flash"
+
+def _ensure_api_key():
+    if not os.getenv("GOOGLE_API_KEY"):
+        raise RuntimeError("GOOGLE_API_KEY not set")
+    genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
 def summarize_meeting(transcript: str) -> str:
-    """
-    Summarize the full meeting transcript into a clear concise summary.
-    """
-    prompt = f"""
-    Summarize the following meeting transcript into a short, clear, and structured summary.
-    Focus on decisions made and important discussion points.
+    if not transcript or not isinstance(transcript, str):
+        return "No transcript provided."
 
-    Transcript:
-    {transcript}
-    """
+    if len(transcript) > 20000:
+        transcript = transcript[-20000:]
 
-    response = genai.GenerativeModel("gemini-2.5-flash").generate_content(prompt)
-    return response.text.strip()
+    prompt = (
+        "Summarize the following meeting transcript into a concise, structured summary "
+        "that includes decisions, deadlines, owners, and important notes.\n\n"
+        f"Transcript:\n{transcript}"
+    )
+
+    try:
+        _ensure_api_key()
+        model = genai.GenerativeModel(MODEL_NAME)
+        resp = model.generate_content(prompt)
+        text = getattr(resp, "text", "") or ""
+        return text.strip() if text.strip() else "No summary generated."
+    except Exception as e:
+        logger.exception("Summarization failed: %s", e)
+        return "Failed to generate summary."

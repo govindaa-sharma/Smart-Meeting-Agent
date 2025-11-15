@@ -1,0 +1,52 @@
+Here's a concise, structured summary of the meeting transcript:
+
+---
+
+**Meeting Summary: Q2 Roadmap Planning**
+
+**Date:** [Implicit from April 3rd, April 5th, April 15th deadlines - likely early April]
+
+**Attendees:** Sarah (Project Manager), Raj (Tech Lead), Emily (Product Designer)
+
+**Objective:** Finalize Q2 priorities, deadlines, and ownership for new features and improvements.
+
+---
+
+**I. Overall Q2 Roadmap Decisions:**
+
+*   **Major Features:**
+    *   Onboarding Revamp (April – May)
+*   **Minor Improvements:**
+    *   Report Generation Optimization (April)
+    *   "What's New" Section Mockups (early April)
+*   **Deferred Items:**
+    *   Analytics Dashboard Redesign (tentatively June)
+    *   AI-powered Recommendations Feature (Pushed to Q3 due to engineering bandwidth)
+
+**II. Key Decisions & Notes:**
+
+*   **Engineering Bandwidth:** Raj confirmed capacity for 2 major features and 1 minor improvement.
+*   **Onboarding Revamp:**
+    *   **Decision:** Prioritized as a major feature for Q2.
+    *   **Timeline:** Development start April 10th, completion by end of May (4 weeks backend, 3 weeks frontend).
+    *   **Note:** Emily's design is 80% ready, pending user testing.
+*   **Analytics Dashboard Redesign:**
+    *   **Decision:** Postponed to mid-Q2 (tentatively June) due to engineering focus on onboarding.
+    *   **Note:** Emily will continue refining mockups in parallel.
+*   **Report Generation Optimization:**
+    *   **Decision:** Prioritized as a critical minor improvement for Q2.
+    *   **Reason:** Addresses repeated customer complaints about slow reports (service doesn't scale beyond 10k rows) and affects many enterprise customers.
+    *   **Solution:** Optimize SQL queries and possibly add caching.
+*   **"What's New" In-App Section:**
+    *   **Decision:** To be designed to improve feature discoverability.
+
+**III. Action Items (Owners & Deadlines):**
+
+1.  **Emily (Product Designer):** Complete user testing for Onboarding Revamp.
+    *   **Deadline:** April 3rd (next Wednesday)
+2.  **Emily (Product Designer):** Deliver initial designs/mockups for the "What's New" in-app section.
+    *   **Deadline:** April 5th
+3.  **Raj (Tech Lead):** Optimize the report generation service.
+    *   **Deadline:** April 15th
+
+---

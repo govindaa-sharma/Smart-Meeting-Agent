@@ -1,8 +1,23 @@
-from retriever import add_to_memory
+# task_memory.py
+import logging
+from retriever import add_actions_to_memory, add_summary_to_memory, add_transcript_to_memory
 
-def store_action_items(actions, meeting_name: str):
-    """
-    Saves extracted action items into memory storage.
-    """
-    text = "\n".join(actions)
-    add_to_memory(text, f"actions_{meeting_name}")
+logger = logging.getLogger(__name__)
+
+def store_transcript(transcript: str, meeting_name: str):
+    try:
+        add_transcript_to_memory(transcript, meeting_name)
+    except Exception as e:
+        logger.exception("Failed storing transcript: %s", e)
+
+def store_summary(summary: str, meeting_name: str):
+    try:
+        add_summary_to_memory(summary, meeting_name)
+    except Exception as e:
+        logger.exception("Failed storing summary: %s", e)
+
+def store_actions(actions, meeting_name: str):
+    try:
+        add_actions_to_memory(actions, meeting_name)
+    except Exception as e:
+        logger.exception("Failed storing actions: %s", e)

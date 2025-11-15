@@ -1,0 +1,66 @@
+[00:00] Sarah (Project Manager): Good morning, everyone. Thanks for joining the Q2 Roadmap Planning Meeting. Today we need to finalize our priorities for the next quarter, discuss deadlines, and assign ownership for the new features.
+
+[00:12] Raj (Tech Lead): Morning. I have the updated engineering bandwidth report ready. Based on current load, we can realistically take up two major features and one minor improvement.
+
+[00:25] Emily (Product Designer): And I have the new UI/UX proposals ready for the onboarding revamp and the analytics dashboard redesign.
+
+[00:36] Sarah: Perfect. Let’s begin with the onboarding revamp. Raj, can you give us a quick update from the engineering side?
+
+[00:45] Raj: Sure. The onboarding revamp will require about 4 weeks for backend and 3 weeks for frontend. If we start on April 10th, we can complete development by the end of May.
+
+[00:58] Emily: The design is 80% ready. The only thing pending is user testing, which I can complete by next Wednesday.
+
+[01:05] Sarah: Okay, action item for Emily — complete user testing for onboarding by next Wednesday, April 3rd.
+
+[01:13] Emily: Noted.
+
+[01:15] Sarah: Next item — the analytics dashboard redesign. Raj, thoughts?
+
+[01:20] Raj: I think we should push this to mid-Q2. Engineering team will be busy with the onboarding changes.
+
+[01:26] Emily: That works. I can continue refining the mockups in parallel.
+
+[01:30] Sarah: Alright. We’ll tentatively schedule this redesign for June.
+
+[01:36] Sarah: Moving on — customer request backlog. We have received repeated complaints about slow report generation. Raj, any update?
+
+[01:44] Raj: Yes. We discovered that the report generation service doesn’t scale beyond 10k rows. We need to optimize the SQL queries and possibly add caching.
+
+[01:55] Sarah: How long would that take?
+
+[01:57] Raj: Around one and a half weeks. But this is important — affects many enterprise customers.
+
+[02:05] Sarah: Agreed. Let's prioritize this as a minor improvement for Q2. Action item: Raj, optimize report generation service by April 15th.
+
+[02:15] Raj: Okay.
+
+[02:17] Sarah: Next, marketing requested a “What’s New” in-app section to improve feature discoverability. Emily, can you design something lightweight for that?
+
+[02:26] Emily: Yes, that won’t take long. I can prepare initial designs by April 5th.
+
+[02:32] Sarah: Great — action item for Emily: deliver “What’s New” section mockups by April 5th.
+
+[02:38] Sarah: Before we wrap up, any blockers?
+
+[02:40] Raj: We need clarity on whether we should integrate the new AI-powered recommendations feature this quarter or push it.
+
+[02:48] Sarah: Let’s push the AI feature to Q3. We don’t have enough engineering bandwidth.
+
+[02:54] Emily: Agreed.
+
+[02:56] Sarah: Okay then, let’s finalize the Q2 roadmap:
+- Onboarding revamp (April–May)
+- Report generation optimization (April)
+- “What’s New” section mockups (early April)
+- Analytics dashboard redesign (June)
+
+[03:15] Sarah: Final action items recap:
+1. Emily — complete onboarding user testing by April 3rd  
+2. Emily — deliver “What’s New” designs by April 5th  
+3. Raj — optimize report generation service by April 15th  
+
+[03:26] Sarah: That’s all. Thanks everyone. I’ll send out the meeting notes by EOD.
+
+[03:32] Raj: Thanks.
+
+[03:33] Emily: Bye.

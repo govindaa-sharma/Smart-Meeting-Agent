@@ -1,5 +1,0 @@
-Team Sync - Feb 11
-
-Govinda will integrate the login and authentication module by Thursday.
-Riya will finish the UI dashboard screens before the next sprint demo.
-Next client demo is scheduled for Monday.

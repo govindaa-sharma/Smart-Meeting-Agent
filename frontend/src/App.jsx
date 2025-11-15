@@ -5,7 +5,8 @@ import Ask from "./pages/Ask.jsx";
 import MeetingDetails from "./pages/MeetingDetails.jsx";
 
 export default function App() {
-  const location = useLocation();
+  const loc = useLocation();
+
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "#f5f7fb" }}>
       <AppBar position="sticky" elevation={0} sx={{ bgcolor: "#171A21" }}>
@@ -13,11 +14,24 @@ export default function App() {
           <Typography variant="h6" sx={{ fontWeight: 700 }}>
             Smart Meeting Agent
           </Typography>
+
           <Box sx={{ flex: 1 }} />
-          <Button component={Link} to="/upload" color="inherit" variant={location.pathname==="/upload"?"outlined":"text"}>
+
+          <Button
+            component={Link}
+            to="/upload"
+            color="inherit"
+            variant={loc.pathname === "/upload" ? "outlined" : "text"}
+          >
             Upload
           </Button>
-          <Button component={Link} to="/ask" color="inherit" variant={location.pathname==="/ask"?"outlined":"text"}>
+
+          <Button
+            component={Link}
+            to="/ask"
+            color="inherit"
+            variant={loc.pathname === "/ask" ? "outlined" : "text"}
+          >
             Ask
           </Button>
         </Toolbar>

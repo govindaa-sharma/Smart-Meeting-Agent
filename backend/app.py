@@ -1,12 +1,21 @@
-from fastapi import FastAPI, UploadFile, File
-from fastapi.middleware.cors import CORSMiddleware
-from graph import workflow, qa_graph
+# app.py
+import os
 import shutil
+import logging
+from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 load_dotenv()
 
-app = FastAPI()
+from agents.summarizer import summarize_meeting
+from agents.action_items import extract_action_items
+from retriever import add_transcript_to_memory, add_summary_to_memory, add_actions_to_memory
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -14,69 +23,113 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+DATA_DIR = "data/meetings"
+os.makedirs(DATA_DIR, exist_ok=True)
+
 @app.post("/upload_meeting")
 async def upload_meeting(title: str, file: UploadFile = File(...)):
-    path = f"data/meetings/{title}.txt"
-    raw_path = f"data/meetings/raw_{title}.txt"
+    if not title:
+        raise HTTPException(status_code=400, detail="title parameter is required")
 
-    with open(raw_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    safe_title = "".join(c for c in title if c.isalnum() or c in (" ", "_", "-")).strip()
+    if not safe_title:
+        raise HTTPException(status_code=400, detail="Invalid title after sanitization")
 
-    with open(raw_path, "r", encoding="utf-8") as f:
-        transcript = f.read()
+    raw_dir = DATA_DIR
+    os.makedirs(raw_dir, exist_ok=True)
 
-    result = workflow.invoke({"title": title, "transcript": transcript})
+    raw_path = os.path.join(raw_dir, f"raw_{safe_title}.txt")
+    summary_path = os.path.join(raw_dir, f"{safe_title}.txt")
 
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(result["summary"])
+    try:
+        # Save uploaded file first
+        with open(raw_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
 
-    import json
-    actions_path = f"data/vector_store/actions_{title}.json"
-    with open(actions_path, "w") as f:
-        json.dump(result["actions"], f, indent=2)
+        # Read transcript text safely
+        with open(raw_path, "r", encoding="utf-8", errors="replace") as f:
+            transcript = f.read()
 
-    return result
+        # 1) Add full transcript to FAISS memory (so QA can answer arbitrary questions)
+        add_transcript_to_memory(transcript, safe_title)
 
-# @app.post("/chat")
-# def chat(query: str):
-#     result = workflow.invoke({"query": query, "transcript": ""})
-#     return {"response": result["memory_recall"]}
+        # 2) Run summarizer & action extraction (LLM)
+        summary = summarize_meeting(transcript) or ""
+        actions = extract_action_items(transcript) or []
 
-import os
-from fastapi.responses import JSONResponse
+        # 3) Store summary & actions into same FAISS memory
+        add_summary_to_memory(summary, safe_title)
+        add_actions_to_memory(actions, safe_title)
 
-DATA_DIR = "data/meetings"
+        # 4) Persist summary text for quick file retrieval
+        with open(summary_path, "w", encoding="utf-8") as f:
+            f.write(summary)
+        print("SUMMARY GENERATED:", summary)
+
+
+        # 5) Return structured response
+        return {"ok": True, "summary": summary, "actions": actions}
+    except Exception as e:
+        logger.exception("upload_meeting failed for %s: %s", safe_title, e)
+        raise HTTPException(status_code=500, detail=f"Failed to process meeting: {e}")
 
 @app.get("/meetings")
 def list_meetings():
-    if not os.path.exists(DATA_DIR):
+    try:
+        if not os.path.exists(DATA_DIR):
+            os.makedirs(DATA_DIR, exist_ok=True)
+            return []
+
+        all_files = os.listdir(DATA_DIR)
+        txt_files = [f for f in all_files if f.endswith(".txt")]
+
+        # Filter out raw_ files
+        final_files = [
+            f.replace(".txt", "")
+            for f in txt_files
+            if not f.startswith("raw_")
+        ]
+
+        return final_files
+
+    except Exception as e:
+        logger.exception("Failed to list meetings: %s", e)
         return []
-    files = [f.replace(".txt", "") for f in os.listdir(DATA_DIR) if f.endswith(".txt")]
-    return files
+
+
+from retriever import retrieve
 
 @app.get("/meeting/{title}")
 def get_meeting_details(title: str):
     meeting_path = os.path.join(DATA_DIR, f"{title}.txt")
-    actions_path = os.path.join("data", "vector_store", f"actions_{title}.json")
-
     summary = "No summary found"
-    actions = []
-
     if os.path.exists(meeting_path):
-        with open(meeting_path, "r") as f:
+        with open(meeting_path, "r", encoding="utf-8", errors="replace") as f:
             summary = f.read()
 
-    if os.path.exists(actions_path):
-        import json
-        with open(actions_path, "r") as f:
-            actions = json.load(f)
+    # Actions from FAISS
+    actions_memory = retrieve("action", title, k=10)
+    actions = []
+    if actions_memory:
+        for line in actions_memory.splitlines():
+            if line.strip().startswith("ACTION:"):
+                actions.append(line.replace("ACTION:", "").strip())
 
     return {"title": title, "summary": summary, "actions": actions}
 
 @app.post("/ask")
 def ask_question(payload: dict):
-    meeting = payload["meeting"]
-    question = payload["query"]
+    meeting = payload.get("meeting")
+    question = payload.get("query") or payload.get("question")
 
-    result = qa_graph.invoke({"title": meeting, "query": question})
-    return {"response": result["answer"]}
+    if not meeting or not question:
+        raise HTTPException(status_code=400, detail="Both 'meeting' and 'query' fields are required.")
+
+    try:
+        # call QA agent logic (kept separate file)
+        from agents.qa_agent import answer_question
+        ans = answer_question(question, meeting)
+        return {"response": ans}
+    except Exception as e:
+        logger.exception("Ask endpoint failed: %s", e)
+        raise HTTPException(status_code=500, detail="Failed to answer question.")
